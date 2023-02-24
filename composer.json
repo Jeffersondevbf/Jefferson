@@ -2,8 +2,7 @@
   "name": "jefferson/router",
   "description": "route manager",
   "license": "mit",
-  "minimum-stability": "stable",
-  "version": "1.0.1",
+  "version": "2.0",
   "authors": [],
   "autoload": {
     "psr-4": {
@@ -12,5 +11,8 @@
   },
   "require": {
     "php": "8.2.2"
+  },
+  "require-dev": {
+
   }
 }
