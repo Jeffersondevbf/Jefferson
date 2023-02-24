@@ -9,5 +9,5 @@
       "Jefferson\\Router\\": "Router/src"
     }
   },
-  "minimum-stability": "stable"
+  "minimum-stability": "dev"
 }
