@@ -1,0 +1,12 @@
+{
+  "name": "jefferson/router",
+  "description": "route manager",
+  "license": "mit",
+  "minimum-stability": "dev",
+  "authors": [],
+  "autoload": {
+    "psr-4": {
+      "Jefferson\\Router\\": "src"
+    }
+  }
+}
