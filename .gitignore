@@ -1,0 +1,4 @@
+vendor/*
+.gitattributes
+.gitignore
+Public/*

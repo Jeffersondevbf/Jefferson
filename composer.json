@@ -6,7 +6,10 @@
   "authors": [],
   "autoload": {
     "psr-4": {
-      "Jefferson\\Router\\": "src"
+      "Jefferson\\Router\\": "Router/src"
     }
+  },
+  "require": {
+    "php": "8.2.2"
   }
 }

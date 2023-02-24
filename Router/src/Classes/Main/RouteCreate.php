@@ -29,7 +29,6 @@ final class RouteCreate implements RouteCreateInterface
         $convertPattern = $this->convertPattern($pattern);
         $convertHandler = $this->convertHandler($handler);
         $convertMethod  = $this->convertMethod($httpMethod);
-
         $fullCheck = empty($convertPattern && $convertHandler && $convertMethod);
 
         if (!$fullCheck){
@@ -49,6 +48,7 @@ final class RouteCreate implements RouteCreateInterface
         if (empty($convertHandler)){
             throw new RouterParserException('handler pattern does not match','3');
         }
+
         if (empty($convertMethod)){
             throw new RouterParserException('method pattern does not match','4');
         }
@@ -94,7 +94,9 @@ final class RouteCreate implements RouteCreateInterface
         $patternParameters = $this->pattern->parametersPattern();
         $patternPathNoParameters = $this->pattern->pathPattern();
         $checkPattern = $this->checkPattern($patternRoute, $pattern);
-
+        if (empty($pattern)){
+            $checkPattern = false;
+        }
         if ($checkPattern){
             $parameters = preg_replace($patternPathNoParameters,'',$pattern);
             $path = preg_replace($patternParameters,'',$pattern);
