@@ -4,18 +4,28 @@ namespace Jefferson\Router\Classes\Main;
 
 use Jefferson\Router\Classes\Errors\RouterParserException;
 use Jefferson\Router\Classes\Interfaces\RouteCreateInterface;
-use Jefferson\Router\Classes\Interfaces\RoutePatternInterface;
+use Jefferson\Router\Classes\Interfaces\PatternInterface;
 
+/**
+ * @author Jefferson Silva
+ */
 final class RouteCreate implements RouteCreateInterface
 {
 
-    private RoutePatternInterface $pattern;
+    private PatternInterface $pattern;
 
     private Container $container;
-    public function __construct(RoutePatternInterface $pattern, Container $container)
+
+    public function __construct(PatternInterface $pattern, Container $container)
     {
         $this->pattern = new $pattern();
+
         $this->container = $container;
+    }
+
+    public function setPattern(PatternInterface $pattern)
+    {
+        $this->pattern = $pattern;
     }
 
     /**
@@ -38,6 +48,8 @@ final class RouteCreate implements RouteCreateInterface
             $controller = $convertHandler['controller'];
             $action = $convertHandler['action'];
             $route =  new Route($method,$path,$controller,$action,$parameters);
+            var_dump($convertPattern);
+
             $this->container->setContainer($route);
         }
 
@@ -75,7 +87,7 @@ final class RouteCreate implements RouteCreateInterface
     {
 
         $method = '';
-        if ($this->checkPattern($this->pattern->methodPattern(),$methodSubject)){
+        if (preg_match($this->pattern->methodPattern(),$methodSubject)){
             $method = strtolower($methodSubject);
 
         }
@@ -84,25 +96,33 @@ final class RouteCreate implements RouteCreateInterface
 
 
     /**
-     * @param $pattern
+     * @param string $pattern
      * @return array
      */
-    private function convertPattern($pattern): array
+    private function convertPattern(string $pattern): array
     {
+
         $route = [];
-        $patternRoute = $this->pattern->routePattern();
+        $patternRoute = $this->pattern->fullRoutePattern();
         $patternParameters = $this->pattern->parametersPattern();
+        var_dump($patternParameters);
         $patternPathNoParameters = $this->pattern->pathPattern();
-        $checkPattern = $this->checkPattern($patternRoute, $pattern);
-        if (empty($pattern)){
-            $checkPattern = false;
-        }
+        var_dump($patternPathNoParameters);
+        $checkPattern = preg_match($patternRoute, $pattern);
+
+        /**
+         * fix later,
+        a bug has to be resolved here in the class Support/Pattern/DefaultPattern
+         */
+        //if (empty($pattern)){$checkPattern = false;}
+
         if ($checkPattern){
             $parameters = preg_replace($patternPathNoParameters,'',$pattern);
             $path = preg_replace($patternParameters,'',$pattern);
-            preg_match_all($this->pattern->parameters(),$parameters,$matches);
+            preg_match_all($this->pattern->paramValuePattern(),$parameters,$matches);
             $route = ['path'=> $path, "parameters" => $matches[0]];
         }
+
       return $route;
     }
 
@@ -115,7 +135,7 @@ final class RouteCreate implements RouteCreateInterface
         $action = [];
 
         if (!is_callable($handler)){
-            $checkHandler = self::checkPattern($this->pattern->handlePattern(),$handler);
+            $checkHandler = preg_match($this->pattern->handlePattern(),$handler);
             if ($checkHandler){
                 $handlerExplode =  explode("@", $handler);
                 $action = ['controller'=> $handlerExplode[0],'action'=> $handlerExplode[1]];
@@ -128,8 +148,4 @@ final class RouteCreate implements RouteCreateInterface
         return $action;
     }
 
-    private function checkPattern($pattern, $source): bool
-    {
-       return preg_match($pattern,$source);
-    }
 }

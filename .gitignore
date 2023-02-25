@@ -1,4 +1,4 @@
-vendor
-Public
+vendor/*
+Public/index.php
 .gitattributes
 .gitignore
