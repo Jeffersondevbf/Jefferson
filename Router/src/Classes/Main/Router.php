@@ -2,62 +2,41 @@
 
 namespace Jefferson\Router\Classes\Main;
 
-use Jefferson\Router\Classes\Errors\RouterParserException;
-use Jefferson\Router\Classes\Interfaces\RoutePatternInterface;
-use Jefferson\Router\Support\Pattern\DefaultRoutePattern;
+use Jefferson\Router\Classes\Interfaces\PatternInterface;
+use Jefferson\Router\Support\Pattern\DefaultPattern;
 
 class Router
 {
 
-    private Container $container;
+    private RouteCreate $routeCreate;
+
+    private DefaultPattern $defaultPattern;
 
     public function __construct()
     {
-        $this->container = new Container();
-        $this->container->setContainer(["name"=>"one test"]);
+        $this->defaultPattern = new DefaultPattern();
+        $this->routeCreate = new RouteCreate($this->defaultPattern);
+
     }
 
     /**
-     * @param mixed|null $pattern
-     * @return RouterParserException|RouteCreate
-     * @throws RouterParserException
+     * @param PatternInterface|null $pattern
+     * @return RouteCreate
      */
-    public function startCreating(mixed $pattern = null): RouterParserException|RouteCreate
+    public function startCreating(PatternInterface $pattern = null): RouteCreate
     {
-
-        if (is_string($pattern)){
-            if (class_exists($pattern)){
-                if (!empty(class_implements($pattern))){
-                    $key     = key_exists(RoutePatternInterface::class,class_implements($pattern));
-                    $pattern = $key ? new $pattern() : null;
-                }
-            }
-        }
-
-        $pattern = is_null($pattern) ? new DefaultRoutePattern() : $pattern;
-        if (!$pattern instanceof RoutePatternInterface){
-            throw new RouterParserException("routePattern must implement routePatternInterface",1);
-        }
-        return new RouteCreate($pattern, $this->container);
+        $pattern = is_null($pattern) ? new DefaultPattern() : $pattern;
+        $this->routeCreate->setPattern($pattern);
+        return $this->routeCreate;
     }
 
-
-    private function getContainer(): Container
+    public function showRoutes(): void
     {
-        return $this->container;
-    }
 
-    /**
-     * @return Container
-     */
-    public function run(): Container
-    {
-        return $this->getContainer();
     }
-
 
     public function save(): void
     {
-        $this->container->toClean();
+
     }
 }

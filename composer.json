@@ -2,6 +2,7 @@
   "name": "jefferson/router",
   "description": "route manager",
   "license": "MIT",
+  "minimum-stability": "dev",
   "version": "2.0",
   "authors": [],
   "autoload": {
@@ -9,5 +10,7 @@
       "Jefferson\\Router\\": "Router/src"
     }
   },
-  "minimum-stability": "dev"
+  "require": {
+    "php": "8.2.2"
+  }
 }
