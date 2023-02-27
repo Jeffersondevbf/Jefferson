@@ -14,9 +14,13 @@ final class RouteCreate implements RouteCreateInterface
 
     private PatternInterface $pattern;
 
-    public function __construct(PatternInterface $pattern)
+    private Container $container;
+
+    public function __construct(PatternInterface $pattern, Container $container)
     {
         $this->pattern = new $pattern();
+
+        $this->container = $container;
     }
 
     public function setPattern(PatternInterface $pattern)
@@ -31,6 +35,7 @@ final class RouteCreate implements RouteCreateInterface
     {
         $handler = is_string($handler)? str_replace(" ","",$handler) : $handler;
         $pattern = str_replace(" ","",$pattern);
+
         $convertPattern = $this->convertPattern($pattern);
         $convertHandler = $this->convertHandler($handler);
         $convertMethod  = $this->convertMethod($httpMethod);
@@ -43,6 +48,9 @@ final class RouteCreate implements RouteCreateInterface
             $controller = $convertHandler['controller'];
             $action = $convertHandler['action'];
             $route =  new Route($method,$path,$controller,$action,$parameters);
+            var_dump($convertPattern);
+
+            $this->container->setContainer($route);
         }
 
         if (empty($convertPattern)){
@@ -95,14 +103,18 @@ final class RouteCreate implements RouteCreateInterface
     {
 
         $route = [];
-
         $patternRoute = $this->pattern->fullRoutePattern();
-
         $patternParameters = $this->pattern->parametersPattern();
-
+        var_dump($patternParameters);
         $patternPathNoParameters = $this->pattern->pathPattern();
-
+        var_dump($patternPathNoParameters);
         $checkPattern = preg_match($patternRoute, $pattern);
+
+        /**
+         * fix later,
+        a bug has to be resolved here in the class Support/Pattern/DefaultPattern
+         */
+        //if (empty($pattern)){$checkPattern = false;}
 
         if ($checkPattern){
             $parameters = preg_replace($patternPathNoParameters,'',$pattern);

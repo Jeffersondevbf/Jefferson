@@ -7,7 +7,6 @@ use Jefferson\Router\Classes\Interfaces\PatternInterface;
 readonly class DefaultPattern implements PatternInterface
 {
 
-
     private array $patterns;
 
     private array $route;
@@ -21,19 +20,14 @@ readonly class DefaultPattern implements PatternInterface
         $start = $escapeTag;
         $end   = $escapeTag;
 
-        $pattern1 = '^(/)$';
-        $pattern2 = '^((/[A-z\d]+)+((-[A-z\d]+)?)+)+$';
-        $pattern3 = '^((/[A-z\d]+)+((-[A-z\d]+)?)+)+(/{([A-z\d]+)+((-[A-z\d]+)?)+})+$';
-        $pattern4 = '^(/{([A-z\d]+)+((-[A-z\d]+)?)+})+$';
-
         $this->patterns = [
             "route" => [
-                "full-route"  => $start."$pattern1|$pattern2|$pattern3|$pattern4".$end,
-                "route"       => $start.'((/[A-z\d]+)(-[A-z\d]+)?)+'.$end,
-                "parameter"   => $start.'(/{(([A-z\d]+)(-[A-z\d]+)?)+})+'.$end,
-                "param-value" => $start.'([A-z\d]+((-[A-z\d]+)+)?)+'.$end,
+                "full-route"  => $start.'^(/)$|^(/[A-z\d]+)+$|^(/[A-z\s]+)+(/{[A-z\d]+})+$|^(/{[A-z\d]+})+$'.$end,
+                "route"       => $start.'(/[A-z\d]+)+'.$end,
+                "parameter"   => $start.'(/{[A-z\d]+})+'.$end,
+                "param-value" => $start.'[A-z\d]+'.$end,
                 "method"      => $start.'^get|post|put|delete$'.$end.'i',
-                "handler"     => $start.'^([\w]+)@([\w]+)$'.$end
+                "handler"     => $start.'^(\s+)?([\w]+)(\s+)?@(\s+)?([\w]+)(\s+)?$'.$end
             ],
             "routes" => ""
         ];
@@ -43,7 +37,7 @@ readonly class DefaultPattern implements PatternInterface
     /**
      * @return string
      * it returns the syntax of the route pattern in this format:
-     * regular expression => #((\/[A-z\d]+)(-[A-z\d?=]+)?)+#
+     * regular expression => #(/[A-z\d]+)#
      * pattern => /route/sub...
      */
     public function pathPattern(): string
@@ -54,8 +48,8 @@ readonly class DefaultPattern implements PatternInterface
     /**
      * @return string
      * it returns the syntax of the parameter pattern in this format:
-     * regular expression => #(\/{[A-z\d]+(-[A-z\d?=]+)?})+#
-     * pattern => /{param1}/{par-am2}...
+     * regular expression => #(/{[A-z\d]+})+#
+     * pattern => /{param1}/{param2}...
      */
     public function parametersPattern(): string
     {
@@ -76,8 +70,8 @@ readonly class DefaultPattern implements PatternInterface
     /**
      * @return string
      * it returns the syntax of the full route pattern in this format:
-     * regular expression => #^(/)$|^(/[A-z\d]+(-[A-z\d?=]+)?)+$|^(/[A-z\d]+(-[A-z\d?=]+)?)+(/{[A-z\d]+(-[A-z\d?=]+)?})+$|^(/{[A-z\d]+(-[A-z\d?=]+)?})+$#
-     * pattern => /route/sub/{param1}/{pa-ram2}?... , /{pa-ram} , /route/{param}...
+     * regular expression => #^(/)$|^(/([\w\d]+))+/(\{[\w\d]+})+|(/(\{[\w\d]+})+)|(/([\w\d]+))+$#
+     * pattern => /route/sub/{param1}/{param2}... , /{param} , /route/{param}...
      */
     public function fullRoutePattern(): string
     {

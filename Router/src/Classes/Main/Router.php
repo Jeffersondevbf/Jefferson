@@ -8,15 +8,17 @@ use Jefferson\Router\Support\Pattern\DefaultPattern;
 class Router
 {
 
+    private Container $container;
+
     private RouteCreate $routeCreate;
 
     private DefaultPattern $defaultPattern;
 
     public function __construct()
     {
+        $this->container = new Container();
         $this->defaultPattern = new DefaultPattern();
-        $this->routeCreate = new RouteCreate($this->defaultPattern);
-
+        $this->routeCreate = new RouteCreate($this->defaultPattern, $this->container);
     }
 
     /**
@@ -30,7 +32,6 @@ class Router
         return $this->routeCreate;
     }
 
-
     public function showRoutes(): void
     {
 
@@ -38,6 +39,6 @@ class Router
 
     public function save(): void
     {
-
+        $this->container->toClean();
     }
 }

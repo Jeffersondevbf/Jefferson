@@ -3,15 +3,17 @@
 <?php
 require '../vendor/autoload.php';
 
-//use Jefferson\Router\Classes\Errors\RouterParserException;
-//use Jefferson\Router\Classes\Main\Router;
-use Jefferson\Router\Support\Container\Container;
+use Jefferson\Router\Classes\Errors\RouterParserException;
+use Jefferson\Router\Classes\Main\Router;
 
-$container = new Container();
-$container->create('jefferson');
-$container->openContainer('jefferson');
-$res = $container->addContent('jefferson', ["oi","ola","ate"]);
-$res = $container->addContent('jefferson', ["ola","oi" , "oito","ok"]);
+$router = new Router();
+$create = $router->startCreating();
 
-var_dump($res);
-var_dump($container->catchOpenContainers());
+try {
+    $create->get('/32', 'Home@view');
+} catch (RouterParserException $e) {
+    echo $e->getMessage();
+}
+
+$router->save();
+$router->showRoutes();
