@@ -28,7 +28,6 @@ interface PatternInterface
      * pattern => get post put delete
      */
     public function methodPattern(): string;
-
     /**
      * @return string
      * it returns the syntax of the full route pattern in this format:

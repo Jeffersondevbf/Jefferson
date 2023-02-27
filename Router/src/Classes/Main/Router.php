@@ -7,7 +7,6 @@ use Jefferson\Router\Support\Pattern\DefaultPattern;
 
 class Router
 {
-
     private Container $container;
 
     private RouteCreate $routeCreate;

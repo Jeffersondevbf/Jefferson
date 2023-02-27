@@ -6,7 +6,6 @@ use Jefferson\Router\Classes\Interfaces\PatternInterface;
 
 readonly class DefaultPattern implements PatternInterface
 {
-
     private array $patterns;
 
     private array $route;

@@ -3,7 +3,6 @@
 namespace Jefferson\Router\Classes\Interfaces;
 
 use Jefferson\Router\Classes\Errors\RouterParserException;
-
 interface RouteCreateInterface
 {
     /**
