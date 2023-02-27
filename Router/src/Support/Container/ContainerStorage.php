@@ -77,6 +77,7 @@ abstract class ContainerStorage
     public function addContent(string $container, mixed $content, $overwrite = false): array
     {
         $array = [];
+
         if (!key_exists($container, $this->storage)) throw new Exception('container not exist');
         if ($this->storage[$container]['close']) throw new Exception('container is closed');
         if (!is_array($content)){

@@ -31,7 +31,6 @@ final class RouteCreate implements RouteCreateInterface
     {
         $handler = is_string($handler)? str_replace(" ","",$handler) : $handler;
         $pattern = str_replace(" ","",$pattern);
-
         $convertPattern = $this->convertPattern($pattern);
         $convertHandler = $this->convertHandler($handler);
         $convertMethod  = $this->convertMethod($httpMethod);

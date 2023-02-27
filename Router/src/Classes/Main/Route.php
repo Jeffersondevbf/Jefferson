@@ -30,6 +30,7 @@ readonly class Route
         $this->action = $action;
     }
 
+
     /**
      * @return string
      */
