@@ -8,7 +8,7 @@ readonly class Route
 
     private string $path;
 
-    private string $controller;
+    private null|string $controller;
 
     private array $param;
 
@@ -17,11 +17,18 @@ readonly class Route
     /**
      * @param string $method
      * @param string $path
-     * @param string $controller
+     * @param string|null $controller
      * @param array $param
-     * @param callable|string $action
+     * @param string|callable $action
      */
-    public function __construct(string $method, string $path, string $controller, callable|string $action, array $param)
+    public function __construct
+    (
+        string $method,
+        string $path,
+        string|null $controller,
+        string|callable $action,
+        array $param
+    )
     {
         $this->method = $method;
         $this->path = $path;
@@ -55,9 +62,9 @@ readonly class Route
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getController(): string
+    public function getController(): string|null
     {
         return $this->controller;
     }

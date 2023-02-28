@@ -2,32 +2,26 @@
 
 namespace Jefferson\Router\Classes\Main;
 
-use Jefferson\Router\Classes\Interfaces\PatternInterface;
-use Jefferson\Router\Support\Pattern\DefaultPattern;
+use Jefferson\Router\Support\Container\Container;
 
-class Router
+class Router extends RouteStorage
 {
+
     private Container $container;
-
     private RouteCreate $routeCreate;
-
-    private DefaultPattern $defaultPattern;
 
     public function __construct()
     {
         $this->container = new Container();
-        $this->defaultPattern = new DefaultPattern();
-        $this->routeCreate = new RouteCreate($this->defaultPattern, $this->container);
+        $router = $this->container->create('router');
+        $this->routeCreate = new RouteCreate($this->container);
     }
 
     /**
-     * @param PatternInterface|null $pattern
      * @return RouteCreate
      */
-    public function startCreating(PatternInterface $pattern = null): RouteCreate
+    public function startCreating(): RouteCreate
     {
-        $pattern = is_null($pattern) ? new DefaultPattern() : $pattern;
-        $this->routeCreate->setPattern($pattern);
         return $this->routeCreate;
     }
 
@@ -36,8 +30,8 @@ class Router
 
     }
 
-    public function save(): void
+    public function save()
     {
-        $this->container->toClean();
+        return $this->container;
     }
 }

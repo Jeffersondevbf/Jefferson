@@ -1,4 +1,4 @@
 vendor/*
-Public/index.php
+public/*
 .gitattributes
 .gitignore
