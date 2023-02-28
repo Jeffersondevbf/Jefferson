@@ -10,7 +10,7 @@ use Jefferson\Router\Classes\Errors\RouterParserException;
 trait ParseRoute
 {
 
-    private string $full = '#^(/)$|^(/[A-z\d]+)+$|^(/[A-z\s]+)+(/{[A-z\d]+})+$|^(/{[A-z\d]+})+$#';
+    private string $full = '#^(/)$|^(/[A-z\d]+)+$|^(/[A-z\d]+)+(/{[A-z\d]+})+$|^(/{[A-z\d]+})+$#';
 
     private string $method = '#^get|post|put|delete$#';
 
